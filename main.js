@@ -19,12 +19,13 @@ class FestiveBloom {
     this.x = x;
     this.y = y;
     this.scale = 0;
-    this.maxScale = isMega ? Math.random() * 0.8 + 0.8 : Math.random() * 0.4 + 0.3;
+    const isMobile = window.innerWidth < 768;
+    this.maxScale = isMega ? (isMobile ? 0.5 : 0.8) : (isMobile ? 0.25 : 0.4);
     this.opacity = 1;
     this.rotation = Math.random() * Math.PI * 2;
     this.petalCount = isMega ? 12 : Math.floor(Math.random() * 3) + 6;
-    this.growthSpeed = isMega ? 0.04 : 0.08;
-    this.fadeSpeed = isMega ? 0.005 : 0.015;
+    this.growthSpeed = isMega ? 0.04 : (isMobile ? 0.05 : 0.08);
+    this.fadeSpeed = isMega ? 0.005 : (isMobile ? 0.02 : 0.015);
     
     const colors = [
       'rgba(255, 213, 79, ', // Gold
@@ -211,7 +212,8 @@ window.addEventListener('click', (e) => {
 
 window.addEventListener('mousemove', (e) => {
   const now = Date.now();
-  if (now - lastMouseBloom > 120) {
+  const throttle = window.innerWidth < 768 ? 250 : 120;
+  if (now - lastMouseBloom > throttle) {
     spawnBloom(e.clientX, e.clientY);
     lastMouseBloom = now;
   }
